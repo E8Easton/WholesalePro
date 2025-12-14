@@ -1,47 +1,24 @@
 
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
 
 interface AuthProps {
   onNavigate: (view: 'login' | 'signup' | 'landing') => void;
+  onLogin: (email: string) => void;
 }
 
-export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
-  const [email, setEmail] = useState('');
+export const LoginPage: React.FC<AuthProps> = ({ onNavigate, onLogin }) => {
+  const [email, setEmail] = useState('demo@wholesalepro.ai');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
+    // Simulate network delay
+    setTimeout(() => {
+      onLogin(email);
       setLoading(false);
-    }
-  };
-
-  const handleWhopLogin = async () => {
-    setLoading(true);
-    // Note: This requires 'whop' provider enabled in Supabase, or use 'oidc'
-    // For now, we simulate the standard OAuth call
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google', // Placeholder for Whop (needs custom provider config in Supabase)
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-    if (error) setError(error.message);
-    setLoading(false);
+    }, 800);
   };
 
   return (
@@ -55,31 +32,7 @@ export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-pink-600 rounded-2xl flex items-center justify-center text-3xl font-black text-white mx-auto mb-4 shadow-lg">W</div>
           <h2 className="text-3xl font-display font-black text-white mb-2">Welcome Back</h2>
-          <p className="text-slate-400 text-sm">Enter your credentials to access the terminal.</p>
-        </div>
-
-        {error && (
-          <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
-            {error}
-          </div>
-        )}
-
-        {/* Whop Button */}
-        <button 
-          onClick={handleWhopLogin}
-          disabled={loading}
-          className="w-full py-4 bg-[#FF6243] hover:bg-[#ff4f2c] text-white font-black text-lg rounded-xl shadow-[0_0_30px_rgba(255,98,67,0.2)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 mb-6"
-        >
-          {loading ? 'Connecting...' : 'Login with Whop'}
-        </button>
-
-        <div className="relative mb-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/10"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-[#0f172a] px-2 text-slate-500">Or continue with email</span>
-          </div>
+          <p className="text-slate-400 text-sm">Enter any credentials to access the demo.</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
@@ -96,17 +49,16 @@ export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
           <div>
             <input 
               type="password" 
-              placeholder="Password"
+              placeholder="Password (Any)"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-slate-950 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:border-blue-500 outline-none transition-colors"
-              required
             />
           </div>
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-3 bg-white hover:bg-slate-200 text-black font-bold rounded-xl transition-colors"
+            className="w-full py-3 bg-white hover:bg-slate-200 text-black font-bold rounded-xl transition-colors shadow-lg shadow-white/10"
           >
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
@@ -127,30 +79,18 @@ export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
   );
 };
 
-export const SignupPage: React.FC<AuthProps> = ({ onNavigate }) => {
+export const SignupPage: React.FC<AuthProps> = ({ onNavigate, onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setError(null);
-    
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      if (error) throw error;
-      alert("Check your email for the confirmation link!");
-      onNavigate('login');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
+    setTimeout(() => {
+      onLogin(email);
       setLoading(false);
-    }
+    }, 800);
   };
 
   return (
@@ -163,12 +103,6 @@ export const SignupPage: React.FC<AuthProps> = ({ onNavigate }) => {
           <h2 className="text-3xl font-display font-black text-white mb-2">Initialize Account</h2>
           <p className="text-slate-400 text-sm">Join the network of top 1% wholesalers.</p>
         </div>
-
-        {error && (
-          <div className="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-xl text-red-400 text-sm text-center">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSignup} className="space-y-4">
           <div>
@@ -196,7 +130,7 @@ export const SignupPage: React.FC<AuthProps> = ({ onNavigate }) => {
             disabled={loading}
             className="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black rounded-xl shadow-lg shadow-emerald-500/20 transition-all transform hover:scale-105"
           >
-            {loading ? 'Creating Account...' : 'Create Account'}
+            {loading ? 'Creating Account...' : 'Create Demo Account'}
           </button>
         </form>
 

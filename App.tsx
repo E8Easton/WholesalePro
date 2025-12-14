@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AppState, CRMLead, CRMDispo, PropertyData, User } from './types';
 import { LandingPage } from './components/LandingPage';
 import { DealDashboard } from './components/DealDashboard';
@@ -14,7 +14,6 @@ import { ProfilePage } from './components/ProfilePage';
 import { ScriptsPage } from './components/ScriptsPage';
 import { LoginPage, SignupPage } from './components/AuthPages';
 import { fetchPropertyDetails } from './services/geminiService';
-import { supabase } from './lib/supabase';
 
 const initialProperty: PropertyData = {
   address: '', city: '', state: '', zip: '', price: 0, arv: 0, repairs: 0, sqft: 0, beds: 0, baths: 0,
@@ -28,64 +27,35 @@ const App: React.FC = () => {
     leads: [],
     dispoList: [],
     activeCalculator: 'none',
-    user: null // Default to logged out
+    user: null 
   });
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState('');
   const [pendingAddress, setPendingAddress] = useState<string | null>(null);
 
-  // --- Auth Logic (Supabase) ---
-  useEffect(() => {
-    // Check active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      handleSession(session);
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      handleSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSession = (session: any) => {
-    if (session?.user) {
-      // Map Supabase user to our User type
-      const newUser: User = {
-        id: session.user.id,
-        name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Member',
-        email: session.user.email || '',
-        avatar: session.user.user_metadata?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80',
-        plan: 'premium', // Default to premium for demo
-        whopId: 'whop_' + session.user.id,
-      };
-      
-      setState(prev => {
-        // Only redirect to dashboard if we were on a public auth page
-        const nextView = (prev.view === 'login' || prev.view === 'signup' || prev.view === 'landing') ? 'dashboard' : prev.view;
+  const handleMockLogin = (email: string) => {
+    const newUser: User = {
+      id: 'mock-user-' + Date.now(),
+      name: email.split('@')[0],
+      email: email,
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80',
+      plan: 'premium',
+      whopId: 'demo_user',
+    };
+    
+    setState(prev => {
+        // Redirect to pending address or dashboard
+        const nextView = pendingAddress ? 'dashboard' : 'dashboard';
         return { ...prev, user: newUser, view: nextView };
-      });
+    });
 
-      // Handle pending address search after login
-      if (pendingAddress) {
-        handleSearch(pendingAddress, true); // Force execute since we are now logged in
+    if (pendingAddress) {
+        handleSearch(pendingAddress, true);
         setPendingAddress(null);
-      }
-    } else {
-      setState(prev => ({ ...prev, user: null }));
     }
   };
 
-  const handleWhopLogin = () => {
-    // Redirect to the dedicated Login Page where the real Auth happens
-    setState(prev => ({ ...prev, view: 'login' }));
-  };
-
-  const handleLogout = async () => {
-      await supabase.auth.signOut();
+  const handleLogout = () => {
       setState(prev => ({ ...prev, user: null, view: 'landing', currentProperty: undefined }));
       setPendingAddress(null);
   };
@@ -190,7 +160,7 @@ const App: React.FC = () => {
         assignedPrice: 0,
         netProfit: 0,
         status: 'Marketing',
-        notes: lead.notes || '', // Transfer notes
+        notes: lead.notes || '', 
         dateAdded: new Date().toLocaleDateString()
     };
     setState(prev => ({ 
@@ -201,9 +171,8 @@ const App: React.FC = () => {
   };
 
   const renderView = () => {
-    // Auth Routes (Available even if logged out)
-    if (state.view === 'login') return <LoginPage onNavigate={(v) => setState(p => ({...p, view: v}))} />;
-    if (state.view === 'signup') return <SignupPage onNavigate={(v) => setState(p => ({...p, view: v}))} />;
+    if (state.view === 'login') return <LoginPage onNavigate={(v) => setState(p => ({...p, view: v}))} onLogin={handleMockLogin} />;
+    if (state.view === 'signup') return <SignupPage onNavigate={(v) => setState(p => ({...p, view: v}))} onLogin={handleMockLogin} />;
 
     if (state.user) {
         if (state.view === 'crm') return (
@@ -244,8 +213,7 @@ const App: React.FC = () => {
     if (state.view === 'howitworks') return <HowItWorksPage />;
     if (state.view === 'pricing') return <PricingPage />;
     
-    // AuthGate fallback for locked areas (dashboard without user)
-    return <AuthGate onLogin={handleWhopLogin} lockedAddress={pendingAddress || undefined} />;
+    return <AuthGate onLogin={() => setState(p => ({...p, view: 'login'}))} lockedAddress={pendingAddress || undefined} />;
   };
 
   const SidebarItem = ({ icon, label, viewName }: any) => (
@@ -330,10 +298,10 @@ const App: React.FC = () => {
 
                               <div className="flex items-center gap-4">
                                   <button 
-                                      onClick={handleWhopLogin}
+                                      onClick={() => setState(p => ({...p, view: 'login'}))}
                                       className="px-6 py-2.5 bg-[#FF6243] hover:bg-[#ff4f2c] text-white rounded-lg text-sm font-bold transition-all shadow-lg shadow-orange-500/20 flex items-center gap-2"
                                   >
-                                      Login with Whop
+                                      Enter App
                                   </button>
                               </div>
                           </div>

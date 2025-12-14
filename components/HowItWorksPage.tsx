@@ -21,7 +21,8 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
 
 export const HowItWorksPage: React.FC = () => {
   const handlePurchase = () => {
-      window.open("https://whop.com/new-era-wholesale/", "_blank");
+      // Direct to app access since it's a demo
+     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
