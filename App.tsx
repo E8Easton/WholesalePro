@@ -166,7 +166,7 @@ const App: React.FC = () => {
     setState(prev => ({ 
         ...prev, 
         dispoList: [...prev.dispoList, newDispo],
-        // Remove from leads array to simulate a "Move"
+        // Remove from leads array to simulate a "Move" operation
         leads: prev.leads.filter(l => l.id !== lead.id)
     }));
   };
