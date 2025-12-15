@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
-import { supabase } from '../lib/supabase';
 
 interface AuthProps {
   onNavigate: (view: 'login' | 'signup' | 'landing') => void;
+  onLogin: (email: string) => void;
 }
 
-export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
+export const LoginPage: React.FC<AuthProps> = ({ onNavigate, onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,31 +17,12 @@ export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
     setLoading(true);
     setError(null);
     
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (error) throw error;
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleWhopLogin = async () => {
-    setLoading(true);
-    // Note: This requires 'whop' provider enabled in Supabase, or use 'oidc'
-    // For now, we simulate the standard OAuth call
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google', // Placeholder for Whop (needs custom provider config in Supabase)
-      options: {
-        redirectTo: window.location.origin,
-      },
-    });
-    if (error) setError(error.message);
-    setLoading(false);
+    // Simulate API call
+    setTimeout(() => {
+        setLoading(false);
+        // Mock successful login
+        onLogin(email);
+    }, 1000);
   };
 
   return (
@@ -63,24 +44,6 @@ export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
             {error}
           </div>
         )}
-
-        {/* Whop Button */}
-        <button 
-          onClick={handleWhopLogin}
-          disabled={loading}
-          className="w-full py-4 bg-[#FF6243] hover:bg-[#ff4f2c] text-white font-black text-lg rounded-xl shadow-[0_0_30px_rgba(255,98,67,0.2)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3 mb-6"
-        >
-          {loading ? 'Connecting...' : 'Login with Whop'}
-        </button>
-
-        <div className="relative mb-6">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/10"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-[#0f172a] px-2 text-slate-500">Or continue with email</span>
-          </div>
-        </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
@@ -127,7 +90,7 @@ export const LoginPage: React.FC<AuthProps> = ({ onNavigate }) => {
   );
 };
 
-export const SignupPage: React.FC<AuthProps> = ({ onNavigate }) => {
+export const SignupPage: React.FC<AuthProps> = ({ onNavigate, onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -138,19 +101,12 @@ export const SignupPage: React.FC<AuthProps> = ({ onNavigate }) => {
     setLoading(true);
     setError(null);
     
-    try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-      if (error) throw error;
-      alert("Check your email for the confirmation link!");
-      onNavigate('login');
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    // Simulate API call
+    setTimeout(() => {
+        setLoading(false);
+        // Mock successful login/signup
+        onLogin(email);
+    }, 1000);
   };
 
   return (

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AppState, CRMLead, CRMDispo, PropertyData, User } from './types';
 import { LandingPage } from './components/LandingPage';
 import { DealDashboard } from './components/DealDashboard';
@@ -14,7 +14,6 @@ import { ProfilePage } from './components/ProfilePage';
 import { ScriptsPage } from './components/ScriptsPage';
 import { LoginPage, SignupPage } from './components/AuthPages';
 import { fetchPropertyDetails } from './services/geminiService';
-import { supabase } from './lib/supabase';
 
 const initialProperty: PropertyData = {
   address: '', city: '', state: '', zip: '', price: 0, arv: 0, repairs: 0, sqft: 0, beds: 0, baths: 0,
@@ -34,60 +33,37 @@ const App: React.FC = () => {
   const [loadingMessage, setLoadingMessage] = useState('');
   const [pendingAddress, setPendingAddress] = useState<string | null>(null);
 
-  // --- Auth Logic (Supabase) ---
-  useEffect(() => {
-    // Check active session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      handleSession(session);
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      handleSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const handleSession = (session: any) => {
-    if (session?.user) {
-      // Map Supabase user to our User type
-      const newUser: User = {
-        id: session.user.id,
-        name: session.user.user_metadata?.full_name || session.user.email?.split('@')[0] || 'Member',
-        email: session.user.email || '',
-        avatar: session.user.user_metadata?.avatar_url || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80',
-        plan: 'premium', // Default to premium for demo
-        whopId: 'whop_' + session.user.id,
-      };
-      
-      setState(prev => {
-        // Only redirect to dashboard if we were on a public auth page
+  const handleMockLogin = (email: string) => {
+    // Mock user for local session
+    const newUser: User = {
+      id: 'mock-user-id',
+      name: email.split('@')[0] || 'Member',
+      email: email,
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&q=80',
+      plan: 'premium',
+      whopId: 'whop_mock_id',
+    };
+    
+    setState(prev => {
+        // Redirect to dashboard or pending view
         const nextView = (prev.view === 'login' || prev.view === 'signup' || prev.view === 'landing') ? 'dashboard' : prev.view;
         return { ...prev, user: newUser, view: nextView };
-      });
+    });
 
-      // Handle pending address search after login
-      if (pendingAddress) {
-        handleSearch(pendingAddress, true); // Force execute since we are now logged in
+    if (pendingAddress) {
+        handleSearch(pendingAddress, true);
         setPendingAddress(null);
-      }
-    } else {
-      setState(prev => ({ ...prev, user: null }));
     }
   };
 
-  const handleWhopLogin = () => {
-    // Redirect to the dedicated Login Page where the real Auth happens
-    setState(prev => ({ ...prev, view: 'login' }));
-  };
-
   const handleLogout = async () => {
-      await supabase.auth.signOut();
       setState(prev => ({ ...prev, user: null, view: 'landing', currentProperty: undefined }));
       setPendingAddress(null);
+  };
+
+  const handleWhopLogin = () => {
+    // Redirect to the software section on the website
+    window.open('https://whop.com/new-era-wholesale/', '_blank');
   };
 
   const handleSearch = async (address: string, forceAuth = false) => {
@@ -202,8 +178,8 @@ const App: React.FC = () => {
 
   const renderView = () => {
     // Auth Routes (Available even if logged out)
-    if (state.view === 'login') return <LoginPage onNavigate={(v) => setState(p => ({...p, view: v}))} />;
-    if (state.view === 'signup') return <SignupPage onNavigate={(v) => setState(p => ({...p, view: v}))} />;
+    if (state.view === 'login') return <LoginPage onNavigate={(v) => setState(p => ({...p, view: v}))} onLogin={handleMockLogin} />;
+    if (state.view === 'signup') return <SignupPage onNavigate={(v) => setState(p => ({...p, view: v}))} onLogin={handleMockLogin} />;
 
     if (state.user) {
         if (state.view === 'crm') return (
