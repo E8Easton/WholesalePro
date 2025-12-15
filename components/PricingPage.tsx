@@ -43,8 +43,7 @@ const FAQItem = ({ question, answer }: { question: string, answer: string }) => 
 
 export const PricingPage: React.FC = () => {
   const handlePurchase = () => {
-     // Direct to app access since it's a demo
-     window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.open("https://whop.com/new-era-wholesale/", "_blank");
   };
 
   return (
@@ -225,6 +224,102 @@ export const PricingPage: React.FC = () => {
             </div>
         </div>
 
+        {/* 5. WHO BUILT THIS - CYBER OVERHAUL */}
+        <div className="py-24 border-t border-white/10 bg-[#020617] relative overflow-hidden">
+            {/* Cyber Grid Background */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#f59e0b1a_1px,transparent_1px),linear-gradient(to_bottom,#f59e0b1a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"></div>
+            <div className="absolute top-0 right-0 w-96 h-96 bg-amber-600/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+            <div className="max-w-5xl mx-auto px-6 relative z-10">
+                <div className="text-center mb-16">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded border border-amber-500/30 bg-amber-950/30 text-amber-400 text-[10px] font-mono font-bold tracking-widest mb-4">
+                        <span className="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                        ARCHITECT_PROFILE
+                    </div>
+                    <h2 className="text-5xl font-display font-black text-white mb-4">E8 Easton Built This</h2>
+                    <p className="text-xl text-amber-500 font-bold tracking-widest uppercase">MEET EASTON</p>
+                </div>
+
+                <div className="flex flex-col md:flex-row gap-12 items-center bg-slate-900/40 border border-white/10 p-8 rounded-[3rem] backdrop-blur-sm relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-[3rem] pointer-events-none"></div>
+                    
+                    {/* Image / Stats Side */}
+                    <div className="w-full md:w-1/3 space-y-6 relative">
+                         {/* Tech Corners */}
+                        <div className="absolute -top-2 -left-2 w-8 h-8 border-t-2 border-l-2 border-amber-500 rounded-tl-xl"></div>
+                        <div className="absolute -bottom-2 -right-2 w-8 h-8 border-b-2 border-r-2 border-amber-500 rounded-br-xl"></div>
+                        
+                        <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-white/10 relative group shadow-2xl">
+                            <img src="easton.jpg" alt="Easton" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                            <div className="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black via-black/80 to-transparent p-6">
+                                <div className="text-3xl font-black text-white">$750k+</div>
+                                <div className="text-xs text-amber-400 uppercase font-bold">Closed Deals (2 Years)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Content Side */}
+                    <div className="w-full md:w-2/3 text-left">
+                        <h3 className="text-3xl font-bold text-white mb-6">From $0 to <span className="text-amber-400">Empire</span> without a license.</h3>
+                        
+                        <div className="prose prose-invert prose-lg text-slate-300 leading-relaxed mb-8 font-light">
+                            <p className="mb-4">
+                                I started wholesaling with <strong className="text-white">zero capital</strong>, no fancy courses, and definitely no tech background. Just me, a laptop, and an obsession with finding a better way.
+                            </p>
+                            <p>
+                                Most gurus charge <strong className="text-red-400">$5,000</strong> for outdated courses that tell you to drive for dollars. I hated that. So I built the system I wish I had when I started.
+                            </p>
+                        </div>
+
+                        <div className="bg-black/40 border-l-4 border-amber-500 p-6 rounded-r-xl mb-10 shadow-lg relative">
+                            <div className="absolute -top-3 -left-1 text-4xl text-amber-500">"</div>
+                            <h4 className="text-amber-500 font-bold text-xs uppercase mb-2 tracking-widest pl-2">The Mission</h4>
+                            <p className="text-lg font-medium text-white italic pl-2">
+                                To give independent wholesalers the same AI firepower as hedge funds, for less than the cost of lunch.
+                            </p>
+                        </div>
+
+                        <button onClick={handlePurchase} className="px-8 py-4 bg-amber-500 hover:bg-amber-400 text-black font-black rounded-xl transition-all flex items-center gap-3 group shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+                            <span>Join New Era Inner Circle</span>
+                            <span className="group-hover:translate-x-1 transition-transform">→</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* 6. FAQ SECTION */}
+        <div className="py-24 max-w-3xl mx-auto text-left px-4">
+            <h2 className="text-4xl font-display font-bold text-center mb-12">Frequently Asked <span className="text-amber-400">Questions</span></h2>
+            
+            <FAQItem 
+                question="Is the software beginner friendly?" 
+                answer="Absolutely. We built WholesalePro AI specifically for people who have never closed a deal before. The interface is simple: Input an address, click a button, get an offer. We also include a full 'Wholesaling 101' training module inside to get you up to speed."
+            />
+            <FAQItem 
+                question="What makes the community different?" 
+                answer="Most communities are dead ghost towns. Ours is a 24/7 war room. Members are posting deals, sharing contracts, and partnering up daily. Plus, Easton is active in the chat answering questions personally."
+            />
+            <FAQItem 
+                question="Are there any hidden fees or upsells?" 
+                answer="No. The $20/month covers everything shown on this page. We don't charge extra for the buyer list, the contracts, or the AI tokens. It's truly an all-in-one price."
+            />
+        </div>
+
+        {/* 7. FINAL STICKY CTA */}
+        <div className="sticky bottom-6 z-50 max-w-md mx-auto px-4">
+             <div className="bg-[#0f172a] border border-amber-500 rounded-2xl p-4 shadow-2xl flex items-center justify-between gap-4 ring-4 ring-black/50">
+                 <div>
+                     <div className="text-[10px] text-amber-400 uppercase font-bold tracking-wider animate-pulse">LIMITED OFFER</div>
+                     <div className="text-white font-bold text-lg">$20/mo <span className="text-xs font-normal text-slate-500">Lock it in</span></div>
+                 </div>
+                 <button onClick={handlePurchase} className="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-300 hover:to-orange-400 text-black font-black px-6 py-3 rounded-xl shadow-lg transition-all hover:scale-105 text-sm uppercase tracking-wide">
+                     Get Access Now
+                 </button>
+             </div>
+        </div>
+
+      </div>
     </div>
   );
 };

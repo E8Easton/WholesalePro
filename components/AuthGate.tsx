@@ -7,6 +7,10 @@ interface AuthGateProps {
 }
 
 export const AuthGate: React.FC<AuthGateProps> = ({ onLogin, lockedAddress }) => {
+  const handlePurchase = () => {
+      window.open("https://whop.com/new-era-wholesale/", "_blank");
+  };
+
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Background Ambience */}
@@ -33,7 +37,7 @@ export const AuthGate: React.FC<AuthGateProps> = ({ onLogin, lockedAddress }) =>
             </div>
         ) : (
             <p className="text-slate-400 text-lg mb-8 leading-relaxed">
-              The Deal Analyzer and CRM are exclusive to <strong className="text-white">New Era Inner Circle</strong> members.
+              The Deal Analyzer and CRM are exclusive to <strong className="text-white">New Era Inner Circle</strong> members. Please log in with your Whop account.
             </p>
         )}
 
@@ -41,11 +45,17 @@ export const AuthGate: React.FC<AuthGateProps> = ({ onLogin, lockedAddress }) =>
           onClick={onLogin}
           className="w-full py-4 bg-[#FF6243] hover:bg-[#ff4f2c] text-white font-black text-xl rounded-xl shadow-[0_0_30px_rgba(255,98,67,0.3)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-3"
         >
-          {lockedAddress ? 'Login to Analyze' : 'Enter Dashboard'}
+          {/* Whop Logo SVG */}
+          <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z"/>
+            <path d="M16.5 7.5H13.5V16.5H16.5V7.5Z" fill="white" fillOpacity="0.5"/>
+            <path d="M10.5 7.5H7.5V16.5H10.5V7.5Z" fill="white"/>
+          </svg>
+          {lockedAddress ? 'Login to Analyze' : 'Log in with Whop'}
         </button>
 
         <p className="mt-6 text-sm text-slate-500">
-          Not a member yet? <button onClick={onLogin} className="text-amber-500 hover:text-amber-400 font-bold underline">Create Demo Account</button>
+          Not a member yet? <button onClick={handlePurchase} className="text-amber-500 hover:text-amber-400 font-bold underline">Get Access for $20</button>
         </p>
 
         <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-center gap-4 text-xs text-slate-600">

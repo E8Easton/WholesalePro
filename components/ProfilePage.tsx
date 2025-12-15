@@ -101,7 +101,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ user, onUpdateUser }) 
                 <h3 className="text-xl font-bold text-white mb-1">Subscription Plan</h3>
                 <p className="text-slate-400 text-sm">You are currently on the <span className="text-emerald-400 font-bold uppercase">{user.plan}</span> tier.</p>
             </div>
-            {/* Subscription Management Link Removed */}
+            <button className="text-slate-500 hover:text-white text-sm font-bold">Manage Whop Subscription →</button>
         </div>
     </div>
   );

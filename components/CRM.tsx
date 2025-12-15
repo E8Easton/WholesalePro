@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { CRMLead, CRMDispo } from '../types';
 
@@ -555,7 +554,7 @@ export const CRM: React.FC<CRMProps> = ({ leads, dispoList, updateLead, updateDi
             onDelete={selectedType === 'lead' ? deleteLead : deleteDispo}
             onPushToDispo={pushToDispo}
             onSendToCalc={onSendToCalculator}
-            // Removed allowPushToDispo prop restriction here so it defaults to true
+            allowPushToDispo={viewMode === 'table'} // Only allow pushing from List view as requested for "different" popup behavior
           />
       )}
 

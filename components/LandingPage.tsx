@@ -95,8 +95,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSearch, onNavigate, 
     if (input.trim()) onSearch(input);
   };
 
-  const handleActionClick = () => {
-      onNavigate('pricing');
+  const handleWhopRedirect = () => {
+      window.open('https://whop.com/new-era-wholesale/', '_blank');
   };
 
   // --- MEMBER VIEW (Simplified Search) ---
@@ -221,7 +221,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSearch, onNavigate, 
                    <div className="absolute inset-0 bg-white/20 skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                    <div className="text-xs font-bold text-white/80 line-through mb-1">Normally $297/mo</div>
                    <div className="text-5xl font-black text-white mb-4">$20<span className="text-lg align-top font-bold text-pink-200">/mo</span></div>
-                   <button onClick={handleActionClick} className="w-full py-3 bg-white text-black font-black uppercase text-xs rounded-xl hover:bg-slate-200 transition-colors shadow-lg">
+                   <button onClick={handleWhopRedirect} className="w-full py-3 bg-white text-black font-black uppercase text-xs rounded-xl hover:bg-slate-200 transition-colors shadow-lg">
                        Get Software Now
                    </button>
                </div>
@@ -316,7 +316,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSearch, onNavigate, 
 
               {/* BIGGEST CTA FUTURISTIC UPDATE - FIXED HOVER */}
               <button 
-                onClick={handleActionClick}
+                onClick={handleWhopRedirect}
                 className="group relative inline-flex items-center justify-center px-12 py-8 text-2xl font-black text-white transition-all duration-200 bg-slate-900 rounded-3xl focus:outline-none hover:scale-105 hover:shadow-[0_0_80px_rgba(6,182,212,0.5)] border border-cyan-500/30 overflow-hidden w-full md:w-auto"
               >
                   <span className="absolute inset-0 w-full h-full transition-all duration-700 ease-out -translate-x-full bg-gradient-to-r from-cyan-500 to-blue-600 group-hover:translate-x-0 ease"></span>
@@ -567,7 +567,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSearch, onNavigate, 
                       </div>
                       
                       <div className="mt-8 flex justify-center">
-                          <button onClick={handleActionClick} className="px-8 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2">
+                          <button onClick={handleWhopRedirect} className="px-8 py-3 bg-gradient-to-r from-amber-400 to-orange-500 text-black font-bold rounded-xl hover:scale-105 transition-transform flex items-center gap-2">
                              Join My Premium Community <span className="text-xl">→</span>
                           </button>
                       </div>
@@ -607,7 +607,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSearch, onNavigate, 
 
               <div className="flex flex-col items-center">
                   <button 
-                    onClick={handleActionClick}
+                    onClick={handleWhopRedirect}
                     className="px-12 py-6 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-black text-2xl rounded-2xl shadow-[0_0_50px_rgba(79,70,229,0.5)] transition-all hover:scale-105 hover:shadow-[0_0_80px_rgba(79,70,229,0.7)]"
                   >
                       Join New Era Today
@@ -650,7 +650,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onSearch, onNavigate, 
                    Join our VIP community and start analyzing deals like a pro.
                </p>
                <button 
-                 onClick={handleActionClick}
+                 onClick={handleWhopRedirect}
                  className="px-16 py-6 bg-white text-black font-black text-2xl rounded-full hover:bg-cyan-50 transition-all hover:scale-105 shadow-[0_0_50px_rgba(255,255,255,0.3)] mb-8"
                 >
                    Get Started Now
