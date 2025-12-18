@@ -1,8 +1,9 @@
 
 import { GoogleGenAI } from "@google/genai";
-import { DealState, GeneratedOffers, PropertyData, Comp, OfferCalculations } from "../types";
+import { PropertyData, Comp, OfferCalculations } from "../types";
 
 export const fetchPropertyDetails = async (address: string): Promise<Partial<PropertyData>> => {
+  // Ensure we use the process.env.API_KEY directly for initialization
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
   const prompt = `
     You are a Real Estate Data Aggregator scraping data for: "${address}".
@@ -44,7 +45,7 @@ export const fetchPropertyDetails = async (address: string): Promise<Partial<Pro
     });
 
     const text = response.text;
-    if (!text) throw new Error("No data returned");
+    if (!text) throw new Error("No data returned from Gemini");
     
     const data = JSON.parse(text);
     
